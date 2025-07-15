@@ -1,0 +1,43 @@
+1 A description of the control flow for the interaction of the Player and a goodie. Where in 
+the code is the co-location of the two objects detected, and what happens from that point 
+until the interaction is finished? Which functions of which objects are called and what do 
+they do during the handling of this situation? 
+
+The control flow of the Player and goodie is as follows:
+	1) Co-location detection
+		this is cone in the goodie's doSomething() method. If the player is detected using isPlayerAt(int x, int y) (found in studentWorld implemented by following the pointer and calling getX and getY and comparing those values) then we move to step 2-->
+	2) Interaction
+		goodie calls setDead() on itself (to remove it from the world)
+		calls getLife() in studentWorld to increment the life and handle the sounds and score outside of the Goodie's doSomething method
+		
+List of functions called during this and what they do:
+	ExtraLifeGoodie::doSomething(): Checks for co-location and initiates the interaction.
+
+	ExtraLifeGoodie::setDead(): Marks the goodie as dead, removing it from the game.
+
+	StudentWorld::isPlayerAt(int x, int y): Checks if the player is at the specified coordinates.
+
+	StudentWorld::getLife(): Handles the effect of collecting an extra life goodie.
+
+This pattern is similar and almost identical between extraLife and Garlic goodies.
+The only difference is that Garlic has to update the player class which is done by using studentWorld functions that call Player member functions to increase burpCount etc.
+
+2. A list of all functionality that you failed to finish as well as known bugs in your classes, 
+e.g. “I didn’t implement the Koopa’s freeze logic.” or “My Bonfire code doesn’t actually 
+remove Barrels from the maze.” 
+
+I believe I have implemented everything in accordance with the spec.
+
+
+3. A list of other design decisions and assumptions you made; e.g., “It was not specified 
+what to do in situation X, so this is what I decided to do.” 
+
+It was not specified how we should tell the game that the level has finished so I implemented a private member Boolean in StudentWorld which is updated when Kong flees to true and is checked everytime we call move() and reset after instantiating the new level. This way we can progress through the levels after Kong has fled.
+
+Additionally, I made left and right kong derived classes of Kong that inherit kong's member functions but they are passing different values for the direction of kong. This way I can create the kong facing different directions depending on which one was created which is especially helpful for barrel.
+
+I was not told how to get the distance between Kong and the player so I simply used the Euclidean distance formula while using the handy cmath header for the sqrt function.
+
+I was not told how to handle the level file updating so I came up with a way that handles the file formatting. It has a counter that is incremented each level and adds the number in string format to "level[num].txt"
+
+Similarly the score was difficult to implement because of the leading zeros I needed. I used some handy string literal functions and added the zeros based on the score.
